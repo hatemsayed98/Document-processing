@@ -1,0 +1,7 @@
+For building docker image type this command:
+docker build --tag django-app .
+
+
+
+For running container type this command:
+docker run -p 8000:8000 django-app
