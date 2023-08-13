@@ -22,3 +22,13 @@ EXPOSE 8000
 
 # Run the Django development server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+
+For building docker image type this command:
+docker build --tag django-app .
+
+
+
+For running container type this command:
+docker run -p 8000:8000 django-app

@@ -1,4 +1,3 @@
-
 from django.urls import path
 from .views import *
 
@@ -10,5 +9,4 @@ urlpatterns = [
     path('pdfs/<int:id>/', get_delete_pdf),
     path('rotate/', rotate_image_view),
     path('convert-pdf-to-image/', convert_pdf_to_image),
-
 ]
