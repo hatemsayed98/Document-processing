@@ -132,12 +132,12 @@ def upload_file(request):
         # Error in serialized_data
         else:
             return JsonResponse(
-                {"error": serialized_data.errors}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Unsupported Media Type"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
             )
 
     # Error in file formate
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({"error": "Unsupported Media Type"}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
 
 @api_view(["GET"])
