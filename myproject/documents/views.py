@@ -23,8 +23,8 @@ from .serializers import (
 )
 from .utils import get_num_pdf_pages, is_pdf, is_image
 
-# Views here
 
+# Views here
 
 @api_view(["POST"])
 def upload_file(request):
@@ -190,10 +190,7 @@ def rotate_image_view(request):
     if myModel.width is not None and myModel.height is not None:
         if rotated_image.width > myModel.width or rotated_image.height > myModel.height:
             rotated_image.thumbnail((myModel.width, myModel.height))
-    # else:
-    #     myModel.width = rotated_image.width
-    #     myModel.height = rotated_image.height
-    #     myModel.save()
+
 
     rotated_image_io = io.BytesIO()
     rotated_image.save(rotated_image_io, format="JPEG")
