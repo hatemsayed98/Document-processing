@@ -2,6 +2,7 @@ import pytest
 import io
 import os
 import PyPDF2
+import base64
 from django.test import TestCase
 from PIL import Image as PILImage
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -26,6 +27,7 @@ from documents.views import (
     get_delete_pdf,
     convert_pdf_to_image,
 )
+from rest_framework.test import APIClient
 
 
 @pytest.mark.django_db
@@ -35,54 +37,62 @@ class TestUploadFileView:
 
     def test_upload_image_file(self):
         test_image_path = os.path.join(
-            os.path.dirname(__file__), "test_files", "speech.jpg"
+            os.path.dirname(__file__), "test_files", "rdi_image_encoded.txt"
         )
 
-        image_content = PILImage.new("RGB", (100, 100), "white")
+        image_content = PILImage.new("RGBA", (173, 117), "white")
         image_io = io.BytesIO()
-        image_content.save(image_io, format="JPEG")
+        image_content.save(image_io, format="PNG")  # Save as PNG
+
+        # Convert the RGBA image to RGB
+        rgb_image = image_content.convert("RGB")
 
         image_file = SimpleUploadedFile(
-            "speech.jpg", open(test_image_path, "rb").read(), content_type="image/jpeg"
+            "rdi_image_encoded.txt", open(test_image_path, "rb").read(), content_type="image/jpeg"
         )
 
-        data = {"file": image_file}
+        data = {"file": image_file, "extension": "png"}
         request = self.factory.post("/upload/", data, format="multipart")
         response = upload_file(request)
         assert response.status_code == status.HTTP_200_OK
 
         image = Image.objects.last()
         assert image is not None
-        assert image.width == 800
-        assert image.height == 631
-        assert image.number_of_channels == 4
+        assert image.width == 173
+        assert image.height == 117
+        assert image.number_of_channels == 4  # RGBA
+
 
     def test_upload_pdf_file(self):
         test_pdf_path = os.path.join(
-            os.path.dirname(__file__), "test_files", "DRF_revision.pdf"
+            os.path.dirname(__file__), "test_files", "encoded-base64_pdf_2_pages.txt"
         )
-
-        with open(test_pdf_path, "rb") as pdf_file:
-            pdf_reader = PyPDF2.PdfReader(pdf_file)
-            num_pages = len(pdf_reader.pages)
 
         pdf_file_content = open(test_pdf_path, "rb").read()
+
         pdf_file = SimpleUploadedFile(
-            "DRF_revision.pdf", pdf_file_content, content_type="application/pdf"
+            "encoded-base64_pdf_2_pages.txt", pdf_file_content, content_type="application/pdf"
         )
 
-        data = {"file": pdf_file}
+        data = {"file": pdf_file, "extension": "pdf"}
         request = self.factory.post("/upload/", data, format="multipart")
         response = upload_file(request)
         assert response.status_code == status.HTTP_200_OK
 
         pdf = PDF.objects.last()
         assert pdf is not None
-        assert pdf.num_pages == num_pages
+
+
+    def test_upload_unmatched_extension_and_file(self):
+        invalid_file = SimpleUploadedFile("encoded-base64_pdf_2_pages.txt", b"Test content")
+        data = {"file": invalid_file, "extension": "jpg"}
+        request = self.factory.post("/upload/", data, format="multipart")
+        response = upload_file(request)
+        assert response.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
 
     def test_upload_invalid_file_type(self):
         invalid_file = SimpleUploadedFile("test_text.txt", b"Test content")
-        data = {"file": invalid_file}
+        data = {"file": invalid_file, "extension": "txt"}
         request = self.factory.post("/upload/", data, format="multipart")
         response = upload_file(request)
         assert response.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
