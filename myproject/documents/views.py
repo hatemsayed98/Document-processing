@@ -10,7 +10,8 @@ import os
 import PyPDF2
 import base64
 import fitz
-from PIL import Image
+from PIL import Image as PILImage
+from PIL import ImageOps
 from pdf2image import convert_from_path
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
@@ -118,7 +119,7 @@ def upload_file(request):
                 with PILImage.open(document.file.path) as image:
                     width, height = image.size
                     number_of_channels = len(image.getbands())
-
+                    print(width, height)
                 # Update the image model instance with calculated values
                 document.width = width
                 document.height = height
@@ -158,7 +159,7 @@ def get_all_pdfs(request):
 def get_delete_image(request, id):
     # Get image instance from ID
     try:
-        image = Image.objects.get(id=int(pdf_id))
+        image = Image.objects.get(id=int(id))
     except:
         return JsonResponse(
             {"error": "Image not found"}, status=status.HTTP_404_NOT_FOUND
@@ -182,7 +183,7 @@ def get_delete_image(request, id):
 def get_delete_pdf(request, id):
     # Get pdf instance from ID
     try:
-        pdf = PDF.objects.get(id=int(pdf_id))
+        pdf = PDF.objects.get(id=int(id))
     except:
         return JsonResponse(
             {"error": "PDF not found"}, status=status.HTTP_404_NOT_FOUND
@@ -209,7 +210,7 @@ def rotate_image_view(request):
     
     # Get image object or raise 404 ID sent does not exist
     try:
-        image = Image.objects.get(id=int(pdf_id))
+        image = Image.objects.get(id=int(image_id))
     except:
         return JsonResponse(
             {"error": "Image not found"}, status=status.HTTP_404_NOT_FOUND
