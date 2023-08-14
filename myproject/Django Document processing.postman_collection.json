@@ -23,11 +23,114 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": []
+							"src": "/E:/Hatem/CamScanner 07-29-2023 05.41_1.jpg"
 						}
 					]
 				},
 				"url": "http://127.0.0.1:8000/api/upload/"
+			},
+			"response": []
+		},
+		{
+			"name": "Get PDFs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": "http://127.0.0.1:8000/api/pdfs/"
+			},
+			"response": []
+		},
+		{
+			"name": "Get PDF Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/pdfs/40/"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete PDF",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/pdfs/40"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Images",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/images/"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Image Details",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Image",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/images/83/"
+			},
+			"response": []
+		},
+		{
+			"name": "Rotate Image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image_id",
+							"value": "85",
+							"type": "text"
+						},
+						{
+							"key": "rotation_angle",
+							"value": "180",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/rotate/"
+			},
+			"response": []
+		},
+		{
+			"name": "Convert Pdf To Image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "pdf_id",
+							"value": "39",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://127.0.0.1:8000/api/convert-pdf-to-image/"
 			},
 			"response": []
 		}
