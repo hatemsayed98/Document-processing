@@ -1,6 +1,9 @@
 from PyPDF2 import PdfReader
 import PyPDF2
 
+
+
+
 def get_num_pdf_pages(pdf_file):
     try:
         pdf_reader = PdfReader(pdf_file)
