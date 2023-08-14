@@ -119,7 +119,6 @@ def upload_file(request):
                 with PILImage.open(document.file.path) as image:
                     width, height = image.size
                     number_of_channels = len(image.getbands())
-                    print(width, height)
                 # Update the image model instance with calculated values
                 document.width = width
                 document.height = height
